@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
+
 function CheckboxUniv() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
@@ -12,36 +22,39 @@ function CheckboxUniv() {
                 'APIKey': `${key}`
             }
         }).then((response) => {
-
-            // const univ = response.data.json();
             setItems(response.data.result);
-            // console.log(items.result);
         });
-        // async function getData(url = '', data = {}) {
-        //     const response = await fetch(url, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'APIKey': '6MedrPxHamuW5yCuaM4QV4e7Ym2kLKfkHvKK5bVdDX1YCalc'
-        //         },
-        //     });
-        //     const univ = await response.json();
-        //     setItems(univ.result);
-        //     console.log(items);
-        // }
-        // getData('http://6medapi.imobisoft.uk/api/Questionnaire/GetAllUniversities')
-        // .then(data => {
-        //     });
-
     }, [])
     return (
-        <ul>
-            {items.map(item => (
-                <li key={item.universityId}>
-                    {item.universityName}
-                </li>
-            ))}
-        </ul>
+        <Autocomplete
+      multiple
+      id="checkboxes-tags-demo"
+      options={items}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.universityName}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+          />
+          {option.universityName}
+        </li>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Select University" placeholder="University" />
+      )}
+    />
+        // <ul>
+        //     {items.map(item => (
+        //         <li key={item.universityId}>
+        //             {item.universityName}
+        //         </li>
+        //     ))}
+        // </ul>
     );
     // if (error) {
     //     return <div>Error: {error.message}</div>;
